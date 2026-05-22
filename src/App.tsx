@@ -31,7 +31,6 @@ export default function App() {
   const [rsvpEntries, setRsvpEntries] = useState<RsvpResponse[]>([]);
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [isCopied, setIsCopied] = useState(false);
-  const [activeDressColor, setActiveDressColor] = useState<string | null>(null);
   const [showFloatNav, setShowFloatNav] = useState(false);
   const [activeSection, setActiveSection] = useState("");
 
@@ -562,66 +561,60 @@ export default function App() {
       {/* 8. DRESS CODE BOARD */}
       <section id="dress-code-section" className={`py-24 relative z-20 ${concept === "cosmic" ? "bg-indigo-950/20" : "bg-stone-100/40"}`}>
         <div className="max-w-4xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Swatch color spheres or blobs */}
-            <div className="lg:col-span-5 space-y-6">
-              <span className="text-[10px] tracking-widest uppercase opacity-60 font-mono">ГАРДЕРОБ // DRESS CODE</span>
-              <h2 className={`text-2xl md:text-4xl ${css.fontTitle}`}>Цветовая палитра</h2>
-              <p className="text-xs leading-relaxed opacity-85 text-stone-500">
-                Мы будем рады видеть вас в красивых и гармоничных нарядах благородных пастельных и естественных оттенков нашей праздничной ботанической палитры. Пожалуйста, выбирайте цвета ниже:
-              </p>
 
-              {/* Interactive Color Circle pallette */}
-              <div className="grid grid-cols-5 gap-3">
-                {eventData.dressCode.colors.map((color, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveDressColor(color.name)}
-                    className="flex flex-col items-center gap-1.5 cursor-pointer relative shrink-0"
-                    title={`Выбрать ${color.name}`}
-                  >
-                    <div
-                      className={`w-11 h-11 rounded-full border border-neutral-300 shadow-md transform transition-all duration-300 ${activeDressColor === color.name ? "scale-115 rotate-12 ring-2 ring-neutral-400 ring-offset-2" : "hover:scale-105 active:scale-95"}`}
-                      style={{ backgroundColor: color.hex }}
-                    />
-                    <span className="text-[9px] font-mono tracking-tighter opacity-80 uppercase block truncate max-w-full text-center">
-                      {color.name}
-                    </span>
-                  </button>
-                ))}
-              </div>
-
-              {/* Expanded active texture status */}
-              {activeDressColor && (
-                <div id="dresscode-active-color-popup" className={`p-3 border text-[11px] font-medium animate-fade-in flex items-center justify-between ${
-                  concept === "cosmic" ? "bg-[#090514]/90 border-indigo-500/20 rounded-lg text-indigo-100" :
-                  concept === "cozy" ? "bg-[#FFFDF9]/90 border-[#B45309]/15 rounded-xl text-[#451A03]" :
-                  "bg-white/80 border border-neutral-200 rounded-xl"
-                }`}>
-                  <span>Рекомендуемый стиль: <strong>{activeDressColor} костюмные ткани, шелк, лен или хлопок</strong></span>
-                  <button onClick={() => setActiveDressColor(null)} className="text-stone-400 hover:text-stone-700 text-xs font-bold font-mono">×</button>
-                </div>
-              )}
-            </div>
-
-            {/* Moodboard image gallery */}
-            <div className="lg:col-span-7">
-              <div className="grid grid-cols-3 gap-3">
-                {eventData.dressCode.moodboardImages.map((img, i) => (
-                  <div key={i} className={`aspect-square relative overflow-hidden shadow-lg border ${concept === "cosmic" ? "border-indigo-500/25 rounded-lg" : concept === "cozy" ? "border-[#B45309]/15 rounded-xl" : "border-white rounded-none"}`}>
-                    <img
-                      src={img}
-                      alt="Dress Code Moodboard"
-                      referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover filter saturate-[0.8] hover:scale-110 transition-transform duration-700"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
+          <div className="text-center space-y-3 mb-14">
+            <span className="text-[10px] tracking-widest uppercase opacity-60 font-mono">ГАРДЕРОБ // DRESS CODE</span>
+            <h2 className={`text-3xl md:text-5xl ${css.fontTitle}`}>Дресс-код</h2>
+            <p className="text-xs leading-relaxed opacity-70 max-w-md mx-auto">
+              Мы хотим, чтобы наш праздник был по-настоящему торжественным и красивым
+            </p>
           </div>
+
+          {/* Dress code format cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-10">
+            {[
+              {
+                title: "Black Tie",
+                icon: "🤵",
+                desc: "Смокинг или торжественный костюм для мужчин. Вечернее платье в пол для женщин."
+              },
+              {
+                title: "Cocktail",
+                icon: "👗",
+                desc: "Коктейльное или вечернее платье для женщин. Классический костюм для мужчин."
+              }
+            ].map((item, i) => (
+              <div key={i} className={`p-6 text-center space-y-3 transition-all ${
+                concept === "cosmic" ? "bg-[#0B0822]/85 border border-indigo-500/20 rounded-lg text-indigo-100" :
+                concept === "cozy" ? "bg-white border border-[#B45309]/15 rounded-xl shadow-sm" :
+                "bg-white border border-neutral-200 rounded-none shadow-sm"
+              }`}>
+                <div className="text-3xl">{item.icon}</div>
+                <h3 className={`text-lg font-bold tracking-wide ${css.fontTitle}`}>{item.title}</h3>
+                <p className="text-xs leading-relaxed opacity-75">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Forbidden colors banner */}
+          <div className={`max-w-2xl mx-auto p-5 text-center space-y-2 border-2 border-dashed ${
+            concept === "cosmic" ? "border-indigo-500/30 rounded-lg text-indigo-200" :
+            concept === "cozy" ? "border-[#B45309]/30 rounded-xl text-[#451A03]" :
+            "border-neutral-300 rounded-none"
+          }`}>
+            <div className="flex items-center justify-center gap-3 mb-1">
+              <div className="w-6 h-6 rounded-full bg-white border-2 border-neutral-400 shadow-sm" title="Белый" />
+              <div className="w-6 h-6 rounded-full bg-neutral-950 border-2 border-neutral-400 shadow-sm" title="Чёрный" />
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-widest opacity-80 font-mono">
+              Просьба не надевать
+            </p>
+            <p className="text-xs leading-relaxed opacity-65">
+              Белый и чёрный цвет — пожалуйста, оставьте их для другого раза 😊<br />
+              Во всём остальном — полная свобода!
+            </p>
+          </div>
+
         </div>
       </section>
 
