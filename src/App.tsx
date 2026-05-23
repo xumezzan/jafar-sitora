@@ -36,7 +36,7 @@ export default function App() {
 
   // References for scrolling calculations
   const scheduleRef = useRef<HTMLDivElement | null>(null);
-  const [reachedAgendaSteps, setReachedAgendaSteps] = useState<boolean[]>([false, false, false, false]);
+  const [reachedAgendaSteps, setReachedAgendaSteps] = useState<boolean[]>([false, false, false, false, false, false]);
 
   // Load guest RSVPs on startup
   const refreshRsvps = async () => {
@@ -416,10 +416,11 @@ export default function App() {
             
             {eventData.schedule.map((item, i) => {
               const isActive = reachedAgendaSteps[i];
-              
+              const isPhotoSession = item.icon === "stars" && item.title.includes("Фотосессия");
+
               return (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   id={`schedule-timeline-item-${i}`}
                   className="relative transition-all duration-500"
                 >
@@ -463,20 +464,26 @@ export default function App() {
 
                   {/* Card Content info */}
                   <div className={`p-6 border transition-all shadow-sm ${
-                    concept === "botanical" ? "bg-white border-stone-200/70 rounded-none text-[#1A2E22]" : 
-                    concept === "passion" ? "bg-neutral-50/95 border-none rounded-3xl text-[#660000]" : 
+                    isPhotoSession
+                      ? concept === "cosmic"
+                        ? "bg-indigo-950/60 border-indigo-400/40 rounded-lg text-indigo-100 ring-1 ring-indigo-400/20"
+                        : concept === "cozy"
+                        ? "bg-amber-50 border-[#B45309]/30 rounded-xl ring-1 ring-[#B45309]/15 text-[#451A03]"
+                        : "bg-stone-50 border-stone-400/40 rounded-none ring-1 ring-stone-300/60 text-[#1A2E22]"
+                      : concept === "botanical" ? "bg-white border-stone-200/70 rounded-none text-[#1A2E22]" :
+                    concept === "passion" ? "bg-neutral-50/95 border-none rounded-3xl text-[#660000]" :
                     concept === "cozy" ? "bg-white border-[#B45309]/10 rounded-xl text-[#451A03]" :
                     concept === "cosmic" ? "bg-[#0B0822]/85 border-indigo-500/15 rounded-lg text-indigo-100" :
                     "bg-white border-stone-200 rounded-xl font-mono text-xs text-neutral-800"
                   }`}>
-                    
+
                     {/* Mobile time display fallback */}
                     <div className="md:hidden text-lg font-bold font-mono mb-1 flex items-center gap-1">
                       <Clock className="w-4 h-4 opacity-50" />
                       <span>{item.time}</span>
                     </div>
 
-                    <h4 className="text-[13px] font-bold uppercase tracking-wide">
+                    <h4 className={`text-[13px] font-bold uppercase tracking-wide ${isPhotoSession ? "italic" : ""}`}>
                       {item.title}
                     </h4>
                     <p className="text-xs leading-relaxed mt-1.5 opacity-80">
